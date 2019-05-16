@@ -58,12 +58,13 @@ def train_nn(X_train, Y_train, X_test, Y_test, ontology):
     model.fit(X_train, Y_train, epochs=100, batch_size=128, verbose=0)
 
     y_prob = model.predict(X_test)
-    np.save("../../result/All_predicted_" + ontology + ".npy",y_prob)
+
+    #np.save("../../result/All_predicted_" + ontology + ".npy",y_prob)
     #np.save("../../result/True_" + ontology + ".npy",Y_test)
     
     scores = compute_single_roc(y_prob,Y_test)
 
-    print("ROC-AUC:",np.nanmean(scores))
+    print("Averaged AUC:",np.nanmean(scores))
     f_max, p_max, r_max, sp_max, t_max = compute_performance(y_prob, Y_test)
     print("F-max:",f_max, p_max, r_max)
     

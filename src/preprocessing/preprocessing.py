@@ -231,7 +231,7 @@ def preprocessing(uniprot_file, string_file):
         string = string[string['protein2'].isin(uniprot['Cross-reference (STRING)'].values)]
 
         # filter by confidence
-        filtered = string[ string['combined_score']>100 ]
+        filtered = string[ string['combined_score']>400 ]
 
         # construct graph
         id_mapping = dict(zip(list(uniprot['Cross-reference (STRING)'].values),range(len(uniprot))))
@@ -240,9 +240,9 @@ def preprocessing(uniprot_file, string_file):
 
         adj = np.zeros((len(id_mapping),len(id_mapping)))
         for i,row in filtered.iterrows():
-            adj[row['protein1_id'],row['protein2_id']] = row['combined_score']/1000.0
+            adj[row['protein1_id'],row['protein2_id']] = 1
         adj = sparse.csr_matrix(adj)
-        sparse.save_npz("../../data/graph.npz", adj)
+        sparse.save_npz("../../data/ppi_400.npz", adj)
         print("\nWrite interactions into ../../data/graph.npz\n")
 
 

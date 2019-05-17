@@ -6,7 +6,6 @@ import scipy.sparse as sp
 from sklearn.preprocessing import scale,normalize
 from sklearn.feature_extraction.text import CountVectorizer
 import pandas as pd
-import json
 
 
 def load_data(network_type="ppi", seq = False, attribute = 6):

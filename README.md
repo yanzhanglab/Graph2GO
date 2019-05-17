@@ -20,10 +20,8 @@ The auto-encoder part of our model is improved based on the implementation by T.
 ### Steps
 #### Step1: decompress data files
 > cd data
-> tar -zxvf data.tar.gz
+> unzip data.zip
 
 #### Step2: run the model
 > cd ../src/Graph2GO
 > python main.py
-
-There are three hyperparameters you can specify: "--lr" for learning rate, "--dropout" for dropout rate and "--epochs" for training epochs.

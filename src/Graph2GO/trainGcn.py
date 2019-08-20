@@ -10,30 +10,13 @@ from sklearn.metrics import average_precision_score
 from optimizer import OptimizerAE, OptimizerVAE
 from gcnModel import GCNModelAE, GCNModelVAE
 from preprocessing import preprocess_graph, construct_feed_dict, sparse_to_tuple
+import argparse
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
-def train_gcn(features, adj_train):
-    # Set up parameters
-    flags = tf.app.flags    
-    FLAGS = flags.FLAGS
-    flags.DEFINE_float('learning_rate', 0.001, 'Initial learning rate.')
-    flags.DEFINE_integer('epochs', 80, 'Number of epochs to train.')
-    flags.DEFINE_integer('hidden1', 800, 'Number of units in hidden layer 1.')
-    flags.DEFINE_integer('hidden2', 400, 'Number of units in hidden layer 2.')
-    flags.DEFINE_float('weight_decay', 0., 'Weight for L2 loss on embedding matrix.')
-    flags.DEFINE_float('dropout', 0, 'Dropout rate (1 - keep probability).')
-    flags.DEFINE_string('model', 'gcn_vae', 'Model string.')
-    flags.DEFINE_integer('attribute', 6, 'used for attribute')
-
-    model_str = FLAGS.model
-    
-    print("learning rate:", FLAGS.learning_rate)
-    print("epochs:", FLAGS.epochs)
-    print("hidden1:", FLAGS.hidden1)
-    print("hidden2:", FLAGS.hidden2)
-    print("attribute:", FLAGS.attribute)
+def train_gcn(features, adj_train, args, graph_type):
+    model_str = args.model
 
     # Store original adjacency matrix (without diagonal entries) for later
     adj_orig = adj_train
@@ -61,9 +44,9 @@ def train_gcn(features, adj_train):
     # Create model
     model = None
     if model_str == 'gcn_ae':
-        model = GCNModelAE(placeholders, num_features, features_nonzero)
+        model = GCNModelAE(placeholders, num_features, features_nonzero, args.hidden1, args.hidden2)
     elif model_str == 'gcn_vae':
-        model = GCNModelVAE(placeholders, num_features, num_nodes, features_nonzero)
+        model = GCNModelVAE(placeholders, num_features, num_nodes, features_nonzero, args.hidden1, args.hidden2)
 
     # Optimizer
     with tf.name_scope('optimizer'):
@@ -72,14 +55,16 @@ def train_gcn(features, adj_train):
                           labels=tf.reshape(tf.sparse_tensor_to_dense(placeholders['adj_orig'],
                           validate_indices=False), [-1]),
                           pos_weight=1,
-                          norm=1)
+                          norm=1,
+                          lr=args.lr)
         elif model_str == 'gcn_vae':
             opt = OptimizerVAE(preds=model.reconstructions,
                            labels=tf.reshape(tf.sparse_tensor_to_dense(placeholders['adj_orig'],
                            validate_indices=False), [-1]),
                            model=model, num_nodes=num_nodes,
                            pos_weight=1,
-                           norm=1)
+                           norm=1,
+                           lr=args.lr)
 
     # Initialize session
     sess = tf.Session()
@@ -90,12 +75,17 @@ def train_gcn(features, adj_train):
     adj_label = sparse_to_tuple(adj_label)
 
     # Train model
-    for epoch in range(FLAGS.epochs):
+    # use different epochs for ppi and similarity network
+    if graph_type == "similarity":
+        epochs = args.epochs_simi
+    else:
+        epochs = args.epochs_ppi
+    for epoch in range(epochs):
 
         t = time.time()
         # Construct feed dictionary
         feed_dict = construct_feed_dict(adj_norm, adj_label, features, placeholders)
-        feed_dict.update({placeholders['dropout']: FLAGS.dropout})
+        feed_dict.update({placeholders['dropout']: args.dropout})
         # Run single weight update
         outs = sess.run([opt.opt_op, opt.cost], feed_dict=feed_dict)
         
@@ -109,6 +99,7 @@ def train_gcn(features, adj_train):
     #return embedding for each protein
     emb = sess.run(model.z_mean,feed_dict=feed_dict)
     
+    '''
     def del_all_flags(FLAGS):
         flags_dict = FLAGS._flags()
         keys_list = [keys for keys in flags_dict]
@@ -116,6 +107,7 @@ def train_gcn(features, adj_train):
             FLAGS.__delattr__(keys)
         
     del_all_flags(FLAGS)
+    '''
     
     return emb
 

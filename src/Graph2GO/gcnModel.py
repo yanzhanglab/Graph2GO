@@ -1,9 +1,6 @@
 from layers import GraphConvolution, GraphConvolutionSparse, InnerProductDecoder
 import tensorflow as tf
 
-flags = tf.app.flags
-FLAGS = flags.FLAGS
-
 
 class Model(object):
     def __init__(self, **kwargs):
@@ -41,27 +38,29 @@ class Model(object):
 
 
 class GCNModelAE(Model):
-    def __init__(self, placeholders, num_features, features_nonzero, **kwargs):
+    def __init__(self, placeholders, num_features, features_nonzero, hidden1, hidden2, **kwargs):
         super(GCNModelAE, self).__init__(**kwargs)
 
         self.inputs = placeholders['features']
         self.input_dim = num_features
         self.features_nonzero = features_nonzero
+        self.hidden1_dim = hidden1
+        self.hidden2_dim = hidden2
         self.adj = placeholders['adj']
         self.dropout = placeholders['dropout']
         self.build()
 
     def _build(self):
         self.hidden1 = GraphConvolutionSparse(input_dim=self.input_dim,
-                                              output_dim=FLAGS.hidden1,
+                                              output_dim=self.hidden1_dim,
                                               adj=self.adj,
                                               features_nonzero=self.features_nonzero,
                                               act=tf.nn.relu,
                                               dropout=self.dropout,
                                               logging=self.logging)(self.inputs)
 
-        self.embeddings = GraphConvolution(input_dim=FLAGS.hidden1,
-                                           output_dim=FLAGS.hidden2,
+        self.embeddings = GraphConvolution(input_dim=self.hidden1_dim,
+                                           output_dim=self.hidden2_dim,
                                            adj=self.adj,
                                            act=lambda x: x,
                                            dropout=self.dropout,
@@ -69,48 +68,50 @@ class GCNModelAE(Model):
 
         self.z_mean = self.embeddings
 
-        self.reconstructions = InnerProductDecoder(input_dim=FLAGS.hidden2,
+        self.reconstructions = InnerProductDecoder(input_dim=self.hidden2_dim,
                                         act=lambda x: x,
                                       logging=self.logging)(self.embeddings)
 
 
 class GCNModelVAE(Model):
-    def __init__(self, placeholders, num_features, num_nodes, features_nonzero, **kwargs):
+    def __init__(self, placeholders, num_features, num_nodes, features_nonzero, hidden1, hidden2, **kwargs):
         super(GCNModelVAE, self).__init__(**kwargs)
 
         self.inputs = placeholders['features']
         self.input_dim = num_features
         self.features_nonzero = features_nonzero
         self.n_samples = num_nodes
+        self.hidden1_dim = hidden1
+        self.hidden2_dim = hidden2
         self.adj = placeholders['adj']
         self.dropout = placeholders['dropout']
         self.build()
 
     def _build(self):
         self.hidden1 = GraphConvolutionSparse(input_dim=self.input_dim,
-                                              output_dim=FLAGS.hidden1,
+                                              output_dim=self.hidden1_dim,
                                               adj=self.adj,
                                               features_nonzero=self.features_nonzero,
                                               act=tf.nn.relu,
                                               dropout=self.dropout,
                                               logging=self.logging)(self.inputs)
 
-        self.z_mean = GraphConvolution(input_dim=FLAGS.hidden1,
-                                       output_dim=FLAGS.hidden2,
+        self.z_mean = GraphConvolution(input_dim=self.hidden1_dim,
+                                       output_dim=self.hidden2_dim,
                                        adj=self.adj,
                                        act=lambda x: x,
                                        dropout=self.dropout,
                                        logging=self.logging)(self.hidden1)
 
-        self.z_log_std = GraphConvolution(input_dim=FLAGS.hidden1,
-                                          output_dim=FLAGS.hidden2,
+        self.z_log_std = GraphConvolution(input_dim=self.hidden1_dim,
+                                          output_dim=self.hidden2_dim,
                                           adj=self.adj,
                                           act=lambda x: x,
                                           dropout=self.dropout,
                                           logging=self.logging)(self.hidden1)
 
-        self.z = self.z_mean + tf.random_normal([self.n_samples, FLAGS.hidden2], dtype=tf.float64) * tf.exp(self.z_log_std)
+        self.z = self.z_mean + tf.random_normal([self.n_samples, self.hidden2_dim], dtype=tf.float64) * tf.exp(self.z_log_std)
 
-        self.reconstructions = InnerProductDecoder(input_dim=FLAGS.hidden2,
+        self.reconstructions = InnerProductDecoder(input_dim=self.hidden2_dim,
                                         act=lambda x: x,
                                       logging=self.logging)(self.z)

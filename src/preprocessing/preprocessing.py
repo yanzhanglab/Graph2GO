@@ -287,7 +287,7 @@ string['protein2_id'] = string['protein2'].apply(lambda x:id_mapping[x])
 
 subnetwork = string[['protein1_id','protein2_id','combined_score']]
 subnetwork['combined_score'] = subnetwork['combined_score']/1000.0
-subnetwork.to_csv(os.path.join(args.data_path, args.species, "networks/string_adj_combined.txt"), index=False, header=False, sep="\t")
+subnetwork.to_csv(os.path.join(args.data_path, args.species, "networks/ppi.txt"), index=False, header=False, sep="\t")
 
 
 

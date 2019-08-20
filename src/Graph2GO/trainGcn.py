@@ -74,12 +74,14 @@ def train_gcn(features, adj_train, args, graph_type):
     adj_label = adj_train + sp.eye(adj_train.shape[0])
     adj_label = sparse_to_tuple(adj_label)
 
+
     # Train model
     # use different epochs for ppi and similarity network
-    if graph_type == "similarity":
+    if graph_type == "sequence_similarity":
         epochs = args.epochs_simi
     else:
         epochs = args.epochs_ppi
+
     for epoch in range(epochs):
 
         t = time.time()
@@ -98,16 +100,6 @@ def train_gcn(features, adj_train, args, graph_type):
     
     #return embedding for each protein
     emb = sess.run(model.z_mean,feed_dict=feed_dict)
-    
-    '''
-    def del_all_flags(FLAGS):
-        flags_dict = FLAGS._flags()
-        keys_list = [keys for keys in flags_dict]
-        for keys in keys_list:
-            FLAGS.__delattr__(keys)
-        
-    del_all_flags(FLAGS)
-    '''
     
     return emb
 

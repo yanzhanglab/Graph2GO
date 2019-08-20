@@ -72,9 +72,9 @@ def load_data(graph_type, uniprot, args):
     
     print('generating features...')
 
-    if graph_type == "combined":
+    if graph_type == "ppi":
         attribute = args.ppi_attributes
-    elif graph_type == "similarity":
+    elif graph_type == "sequence_similarity":
         attribute = args.simi_attributes
         
     if attribute == 0:
@@ -102,15 +102,12 @@ def load_data(graph_type, uniprot, args):
     features = sp.csr_matrix(features)
 
     print('loading graph...')
-    if graph_type == "similarity":
-        filename = os.path.join(args.data_path, args.species, "networks/blast_similarity_adj.txt")
+    if graph_type == "sequence_similarity":
+        filename = os.path.join(args.data_path, args.species, "networks/sequence_similarity.txt")
         adj = load_simi_network(filename, uniprot.shape[0], args.thr_evalue)
-    elif graph_type == "combined":
-        filename = os.path.join(args.data_path, args.species, "networks/string_adj_" + graph_type + ".txt")
-        adj = load_ppi_network(filename, uniprot.shape[0], args.thr_combined)
-    else:
-        filename = os.path.join(args.data_path, args.species, "networks/string_adj_" + graph_type + ".txt")
-        adj = load_ppi_network(filename, uniprot.shape[0], args.thr_single)
+    elif graph_type == "ppi":
+        filename = os.path.join(args.data_path, args.species, "networks/ppi.txt")
+        adj = load_ppi_network(filename, uniprot.shape[0], args.thr_ppi)
     
     adj = sp.csr_matrix(adj)
      

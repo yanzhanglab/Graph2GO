@@ -82,6 +82,9 @@ def train(args):
     perf_cc['101-300'] = evaluate_performance(Y_test_cc[:,index_101_300_cc], y_score_101_300_cc)
     print perf_cc
     
+    if not os.d(os.path.join(args.results_path, args.species)):
+        os.makedirs(os.path.join(args.results_path, args.species))
+
     filename = os.path.join(args.results_path, args.species, "results_cc_graph2go.json")
     if args.save_results:
         with open(filename, "w") as f:

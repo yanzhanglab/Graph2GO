@@ -9,7 +9,6 @@ from collections import defaultdict
 
 from trainGcn import train_gcn
 from trainNN import train_nn
-from trainSVM import train_svm
 
 from evaluation import evaluate_performance, get_label_frequency
 

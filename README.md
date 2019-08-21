@@ -1,7 +1,10 @@
 # Graph2GO
 ## Description
-This is a graph-based representation learning method for prediction protein functions. Protein-protein interactions (PPIs), amino acid sequence, subcellular location and protein domains information are used to train the model.
-The auto-encoder part of our model is improved based on the implementation by T. N. Kifp. You can find the source code here [Graph Auto-Encoders](https://github.com/tkipf/gae). Thanks for T. N. Kifp.
+This is a graph-based representation learning method for predicting protein functions. We use both network information and node attributes to improve the performance. Protein-protein interaction (PPIs) networks and sequence similarity networks are used to construct graphs, which are used to propagate node attribtues, according to the definition of graph convolutional networks.
+
+We use amino acid sequence (CT encoding), subcellular location (bag-of-words encoding) and protein domains (bag-of-words encoding) as the node attributes (initial feature representation).
+
+The auto-encoder part of our model is improved based on the implementation by T. N. Kifp. You can find the source code here [Graph Auto-Encoders](https://github.com/tkipf/gae). 
 
 ## Usage
 ### Requirements

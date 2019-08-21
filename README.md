@@ -19,7 +19,7 @@ The auto-encoder part of our model is improved based on the implementation by T.
 - pandas
 
 ### Data
-You can download the data of all six species from here [https://www.dropbox.com/s/ilrudy0j7wb7b8s/data.zip?dl=0]{:target="_blank"}. Please Download the datasets and put the data folder in the same path as thee src folder.
+You can download the data of all six species from here <a href="https://www.dropbox.com/s/ilrudy0j7wb7b8s/data.zip?dl=0" target="_blank">data</a>. Please Download the datasets and put the data folder in the same path as thee src folder.
 
 ### Steps
 #### Step1: decompress data files
@@ -28,4 +28,4 @@ You can download the data of all six species from here [https://www.dropbox.com/
 #### Step2: run the model
 > cd src/Graph2GO     
 > python main.py    
-> *Note there are several parameters can be tuned: --ppi_attributes, --simi_attributes, --species, --thr_ppi, --thr_evalue, etc. Please refer to the main.py file for detailed description of all parameters*
+> **Note there are several parameters can be tuned: --ppi_attributes, --simi_attributes, --species, --thr_ppi, --thr_evalue, etc. Please refer to the main.py file for detailed description of all parameters**

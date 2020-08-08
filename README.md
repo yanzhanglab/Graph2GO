@@ -4,10 +4,10 @@ This is a graph-based representation learning method for predicting protein func
 
 We use amino acid sequence (CT encoding), subcellular location (bag-of-words encoding) and protein domains (bag-of-words encoding) as the node attributes (initial feature representation).
 
-The auto-encoder part of our model is improved based on the implementation by T. N. Kifp. You can find the source code here [Graph Auto-Encoders](https://github.com/tkipf/gae). 
+The auto-encoder part of our model is improved based on the implementation by T. N. Kifp. You can find the source code [here](https://github.com/tkipf/gae). 
 
 ## citing
-If you found Graph2GO is useful for your research, please consider citing our work [Graph2GO](https://academic.oup.com/gigascience/article/9/8/giaa081/5885490):
+If you found Graph2GO is useful for your research, please consider citing our [work](https://academic.oup.com/gigascience/article/9/8/giaa081/5885490):
 ```
 @article{10.1093/gigascience/giaa081,
     author = {Fan, Kunjie and Guan, Yuanfang and Zhang, Yan},

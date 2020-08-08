@@ -9,7 +9,18 @@ The auto-encoder part of our model is improved based on the implementation by T.
 ## citing
 If you found Graph2GO is useful for your research, please consider citing our work:
 ```
-Kunjie Fan, Yuanfang Guan, Yan Zhang, Graph2GO: a multi-modal attributed network embedding method for inferring protein functions, GigaScience, Volume 9, Issue 8, August 2020, giaa081, https://doi.org/10.1093/gigascience/giaa081
+@article{10.1093/gigascience/giaa081,
+    author = {Fan, Kunjie and Guan, Yuanfang and Zhang, Yan},
+    title = "{Graph2GO: a multi-modal attributed network embedding method for inferring protein functions}",
+    journal = {GigaScience},
+    volume = {9},
+    number = {8},
+    year = {2020},
+    month = {08},
+    issn = {2047-217X},
+    doi = {10.1093/gigascience/giaa081},
+    url = {https://doi.org/10.1093/gigascience/giaa081}
+}
 ```
 
 ## Usage

@@ -6,6 +6,12 @@ We use amino acid sequence (CT encoding), subcellular location (bag-of-words enc
 
 The auto-encoder part of our model is improved based on the implementation by T. N. Kifp. You can find the source code here [Graph Auto-Encoders](https://github.com/tkipf/gae). 
 
+## citing
+If you found Graph2GO is useful for your research, please consider citing our work:
+```
+Kunjie Fan, Yuanfang Guan, Yan Zhang, Graph2GO: a multi-modal attributed network embedding method for inferring protein functions, GigaScience, Volume 9, Issue 8, August 2020, giaa081, https://doi.org/10.1093/gigascience/giaa081
+```
+
 ## Usage
 ### Requirements
 - Python 3.6

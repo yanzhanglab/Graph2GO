@@ -6,6 +6,9 @@ We use amino acid sequence (CT encoding), subcellular location (bag-of-words enc
 
 The auto-encoder part of our model is improved based on the implementation by T. N. Kifp. You can find the source code [here](https://github.com/tkipf/gae). 
 
+![VGAE model](https://github.com/yanzhanglab/Graph2GO/blob/master/model_up.PNG)
+![model architecture](https://github.com/yanzhanglab/Graph2GO/blob/master/model_down.PNG)
+
 ## citing
 If you found Graph2GO is useful for your research, please consider citing our [work](https://academic.oup.com/gigascience/article/9/8/giaa081/5885490):
 ```

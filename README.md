@@ -1,4 +1,7 @@
 # Graph2GO
+## Notice
+Due to resource limitations, the Shiny application of Graph2GO is no longer maintained. The code and data provided here are available for academic use under the stated license.
+
 ## Description
 This is a graph-based representation learning method for predicting protein functions. We use both network information and node attributes to improve the performance. Protein-protein interaction (PPIs) networks and sequence similarity networks are used to construct graphs, which are used to propagate node attribtues, according to the definition of graph convolutional networks.
 
